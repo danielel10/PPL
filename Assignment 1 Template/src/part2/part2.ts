@@ -4,7 +4,6 @@ const stringToArray = R.split("");
 
 /* Question 1 */
 export const countLetters =  (s: string) =>  {
-    const arr1 = stringToArray(R.toLower(s));
     return R.reduce((acc,curr) => {
         if(acc[curr] != undefined) {
             acc[curr]++;
@@ -15,20 +14,63 @@ export const countLetters =  (s: string) =>  {
             return acc;
         }
             
-    }, Object.create({}), arr1)
+    }, Object.create({}), stringToArray(R.toLower(s)))
     
 }
 
-console.log(countLetters("ABbbaab"))
 
-/* Question 2 */
-export const isPaired: (s: string) => boolean = undefined
 
-// /* Question 3 */
-// interface WordTree {
-//     root: string;
-//     children: WordTree[];
-// }
+// /* Question 2 */
+export const isPaired = (s: string): boolean => {
+    return R.reduce((acc,curr) => {
+        if(curr === ')' || curr === '}' || curr === ']') {
+            switch (curr) {
+                case ']' : {
+                    if (acc.charAt(acc.length - 1) === '[') {
+                        acc = acc.slice(0,acc.length - 1);
+                        return acc;
+                    }
+                    else {
+                        return acc + curr;
+                    }
+                }
+                case '}' : {
+                    if (acc.charAt(acc.length - 1) === '{') {
+                        acc = acc.slice(0,acc.length - 1);
+                        return acc;
+                    }
+                    else {
+                        return acc + curr;
+                    }
+                }
+                case ')' : {
+                    if (acc.charAt(acc.length - 1) === '(') {
+                        acc = acc.slice(0,acc.length - 1);
+                        return acc;
+                    }
+                    else {
+                        return acc + curr;
+                    }
+                }
+                    
+            }
+        }
+        else {
+            return acc + curr;
+        }
+    }, "", R.filter(x => x === '(' || x === ')' || x === '{' || x === '}' || x === '[' || x === ']',  stringToArray(s))) === "";
 
-// export const treeToSentence = (t: WordTree): string => undefined
+}
+
+
+/* Question 3 */
+interface WordTree {
+    root: string;
+    children: WordTree[];
+}
+
+export const treeToSentence = (t: WordTree): string => t.root + R.reduce((acc,curr) => acc + " " + treeToSentence(curr) ,"",t.children);
+
+
+
 
