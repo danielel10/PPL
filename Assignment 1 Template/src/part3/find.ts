@@ -9,12 +9,10 @@ const findOrThrow = <T>(pred: (x: T) => boolean, a: T[]): T => {
 }
 
 export const findResult = <T>(pred: (x: T) => boolean, a: T[]): Result<T> => {
-    try {
-        return makeOk(findOrThrow(pred,a))
-    }
-    catch (e) {
-        return makeFailure("No element found.")
-    }
+    return a.length === 0 ? makeFailure("no element found") :
+    pred(a[0]) ? makeOk(a[0]) :
+    findResult(pred, a.slice(1));
+
 }
 
 /* Client code */
